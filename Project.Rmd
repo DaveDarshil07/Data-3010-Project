@@ -1,0 +1,69 @@
+---
+title: "Finding Waldo: Image Recognition using CNNs"
+author: "Your Name"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# 1. Introduction
+
+## 1.1 Motivation
+
+Image recognition has become a cornerstone of modern computer vision applications, ranging from facial recognition and automated vehicle navigation to medical diagnostics and augmented reality. The challenge of differentiating objects within a complex, cluttered scene is a problem that pushes the boundaries of machine learning algorithms.
+
+The concept of **“Finding Waldo”** represents a unique image recognition task:
+
+- **Challenge**: The main challenge in finding Waldo lies in identifying a specific character in a busy, detailed scene filled with distractors. This makes it an ideal test case for measuring how well convolutional neural networks (CNNs) can differentiate and locate objects that share many visual features with surrounding elements.
+- **Relevance**: Solving such tasks can provide insights into more complex real-world applications, such as identifying specific items in surveillance footage or locating features in medical scans.
+
+## 1.2 Potential Real-Life Applications
+
+- **Security and Surveillance**: Techniques developed here can be applied to recognize persons or objects of interest within crowded environments.
+- **Medical Imaging**: Similar approaches could be adapted for spotting anomalies in scans that are surrounded by dense biological structures.
+- **Augmented Reality (AR)**: Enhanced object recognition in AR experiences, where the system must locate and differentiate items within a real-world view.
+- **Gaming and Interactive Media**: Improves AI behavior for spotting targets or key items in visually complex gaming environments.
+
+## 1.3 Contributions
+
+The contributions of this project include:
+
+- **Development of a Custom CNN Architecture**: Tailored to detect a specific object within a highly cluttered scene.
+- **Optimization Techniques**: Application of data augmentation and transfer learning to improve accuracy in recognizing Waldo.
+- **Empirical Evaluation**: Detailed analysis of model performance, highlighting strengths and potential areas for improvement.
+- **Comparison to Baseline Models**: Performance comparison against simpler machine learning approaches to demonstrate the efficacy of CNNs in complex visual differentiation tasks.
+
+# 2. Background & Related Work
+
+## 2.1 Overview of CNNs for Image Recognition
+
+Convolutional Neural Networks (CNNs) have revolutionized the field of image recognition due to their ability to learn hierarchical feature representations. Unlike traditional machine learning models, CNNs automatically learn features from data, enabling them to excel in tasks where manual feature engineering is challenging.
+
+**Key Components of CNNs**:
+
+- **Convolutional Layers**: Extract feature maps from input images by applying filters that learn to recognize various visual patterns.
+- **Pooling Layers**: Reduce dimensionality, allowing the network to focus on the most critical features while maintaining spatial invariance.
+- **Fully Connected Layers**: Integrate the features learned by previous layers to make final predictions.
+
+## 2.2 Challenges in Object Recognition in Complex Scenes
+
+Object detection in cluttered environments, like **“Finding Waldo”** illustrations, poses unique challenges:
+
+- **Small Target Size**: Waldo is relatively small compared to the entire image, which demands a high level of precision from the model.
+- **Visual Similarity**: The presence of characters and objects that resemble Waldo can lead to false positives.
+- **Cluttered Backgrounds**: These can make it difficult for models to isolate relevant features.
+
+## 2.3 Related Work
+
+- **General Image Recognition**: Classic models like **AlexNet**, **VGG**, and **ResNet** have shown exceptional results in standard datasets like ImageNet. However, their effectiveness can be diminished in highly cluttered, detailed images.
+- **Object Detection**: Methods such as **Faster R-CNN** and **YOLO (You Only Look Once)** have been developed for real-time object detection, excelling in simpler cases but facing challenges with smaller objects in crowded scenes.
+- **Existing “Where’s Waldo” Projects**: Some exploratory research and implementations have been done using simpler algorithms (e.g., template matching). These often fall short in accuracy and adaptability to more complex images.
+
+## 2.4 Shortcomings of Existing Work
+
+- **Traditional Approaches**: Algorithms like template matching or standard feature detection (e.g., SIFT, ORB) fail when tasked with differentiating highly similar patterns in crowded scenes.
+- **Deep Learning Limitations**: While deep learning models have improved performance, models pre-trained on general datasets may not effectively transfer to the unique, dense context of **“Finding Waldo”** without fine-tuning or data-specific modifications.
+
+## 2.5 Comparison and Contrast
+
+- **Existing CNNs**: General models like **ResNet** or **VGG** require substantial adaptation and training for the specific task of finding Waldo. Their default training on less complex, non-crowded datasets limits their performance in this context.
+- **Our Approach**: By customizing a CNN architecture tailored for recognizing Waldo amidst visual clutter, our model can achieve higher precision and fewer false detections.
