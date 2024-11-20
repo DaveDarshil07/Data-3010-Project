@@ -34,10 +34,10 @@ data_gen = ImageDataGenerator(rescale=1./255, rotation_range=20, width_shift_ran
                               height_shift_range=0.2, shear_range=0.2, zoom_range=0.2, 
                               horizontal_flip=True, fill_mode='nearest', validation_split=0.2)
 
-train_data = data_gen.flow_from_directory('dataset/', target_size=(224, 224), batch_size=32, class_mode='binary', subset='training')
+train_data = data_gen.flow_from_directory('/mnt/data/dataset/', target_size=(224, 224), batch_size=32, class_mode='binary', subset='training')
 validation_data = data_gen.flow_from_directory('dataset/', target_size=(224, 224), batch_size=32, class_mode='binary', subset='validation')
 
-# Train the model
+# Train the model, can change the epochs value according to system GPU support
 history = model.fit(train_data, validation_data=validation_data, epochs=10)
 
 # Save the model
@@ -60,4 +60,3 @@ plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.legend(['Train', 'Validation'], loc='upper left')
 plt.show()
-
