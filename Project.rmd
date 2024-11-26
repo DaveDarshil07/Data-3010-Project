@@ -1,15 +1,20 @@
 ---
-title: "Finding Waldo: Image Recognition using CNNs"
+title: 'Finding Waldo: Image Recognition using CNNs'
 author: "Your Name"
 date: "November 19, 2024"
-output: pdf_document: default
+output:
+  pdf_document:
+    number_sections: true
+  html_document:
+    df_print: paged
 geometry: margin=1in
 classoption: twocolumn
+header-includes:
+  - \usepackage{tabularx}
 ---
 
-# Finding Waldo: Image Recognition using CNNs
 
-**Your Name**
+# Finding Waldo: Image Recognition using CNNs
 
 ## Abstract
 This project focuses on using Convolutional Neural Networks (CNNs) for image recognition and differentiation, taking the popular "Finding Waldo" puzzle as a case study. The goal is to explore the ability of CNNs to detect and differentiate specific objects in a cluttered, detailed scene. The unique challenges presented by finding a small object, such as Waldo, in a highly detailed image require effective feature extraction, complex pattern differentiation, and advanced image processing. This paper presents the methodology, results, and potential applications of this approach, highlighting the strengths and limitations of CNNs for such tasks.
@@ -54,116 +59,114 @@ The challenge in identifying objects in cluttered environments, like “Finding 
 - **Template Matching**: Previous methods based on template matching do not perform well due to significant variations in scale, rotation, and occlusion of the target.
 - **Standard Deep Learning Models**: General-purpose deep learning models may lack the fine-tuning necessary to differentiate small, highly similar objects in complex backgrounds effectively.
 
-## 3. Methodology
+## CNN Model
 
-### 3.1 CNN Model Design
-The CNN architecture used in this project includes:
-- **Input Layer**: Accepts images resized to 224x224 pixels, similar to the approach used in Krizhevsky et al. (2012) to standardize input for processing.
-- **Convolutional and Pooling Layers**: Multiple layers with 3x3 filters to extract detailed feature representations.
-- **Fully Connected Layers**: Two fully connected layers followed by an output layer with a softmax function for final classification.
+The CNN model is designed to classify images into two categories:
+1. **Waldo Present**
+2. **Waldo Absent**
 
-### 3.2 Training Process
-- **Dataset Preparation**: A custom dataset of “Finding Waldo” images was prepared. Images were annotated, and data augmentation techniques such as rotation, scaling, and flipping were applied to increase dataset variability.
-- **Training Parameters**: The model was trained using a learning rate of 0.001, with the Adam optimizer and cross-entropy loss. This follows similar optimization methods discussed in Goodfellow et al. (2016).
-- **Evaluation Metrics**: Precision, recall, and F1-score were used to evaluate the model’s effectiveness.
+The model includes the following layers:
+- **Convolutional Layers** for feature extraction.
+- **Pooling Layers** for dimensionality reduction.
+- **Dense Layers** for classification.
 
-## 4. Main Body
+The dataset consists of labeled images in the `waldo_present` and `waldo_absent` categories. The model was trained using TensorFlow/Keras, with data augmentation techniques applied to improve generalization.
 
-### 4.1 Description of the Approach
-The approach used in this project was to develop a custom Convolutional Neural Network (CNN) architecture capable of recognizing Waldo in a variety of complex and cluttered images. The architecture was designed with multiple convolutional and pooling layers to ensure that the network could capture fine-grained features crucial to differentiating Waldo from the cluttered background.
+### CNN Model Architecture
 
-### 4.2 Step-by-Step Illustrative Example
-1. **Image Input and Preprocessing**: The image is resized to 224x224 pixels and normalized to bring pixel values within a consistent range.
-2. **Feature Extraction**: The initial convolutional layers apply a series of 3x3 filters to extract low-level features such as edges, colors, and textures.
-3. **Deep Feature Learning**: Additional convolutional layers are used to learn deeper features, which help in identifying complex visual patterns unique to Waldo.
-4. **Pooling for Dimensionality Reduction**: Max pooling layers are used to reduce the size of feature maps, keeping the most significant information while reducing computation.
-5. **Classification**: Fully connected layers aggregate the features and classify whether the given patch of the image contains Waldo or not.
-6. **Sliding Window Search**: A sliding window approach is used to systematically scan across the image, ensuring that each part of the image is analyzed for Waldo’s presence.
+\begin{table}[h!]
+\centering
+\caption{Summary of CNN Model Architecture}
+\begin{tabularx}{\linewidth}{|l|X|}
+\hline
+\textbf{Layer} & \textbf{Description} \\ \hline
+Input & Input layer with shape (224, 224, 3) \\ \hline
+Conv2D & 32 filters with 3x3 kernel, ReLU activation \\ \hline
+MaxPooling2D & 2x2 pooling for downsampling \\ \hline
+Conv2D & 64 filters with 3x3 kernel, ReLU activation \\ \hline
+MaxPooling2D & 2x2 pooling for downsampling \\ \hline
+Conv2D & 128 filters with 3x3 kernel, ReLU activation \\ \hline
+MaxPooling2D & 2x2 pooling for downsampling \\ \hline
+GlobalAveragePooling2D & Average pooling over spatial dimensions \\ \hline
+Dense & Dense layer with 128 units, ReLU activation \\ \hline
+Output & Dense layer with 1 unit, Sigmoid activation \\ \hline
+\end{tabularx}
+\end{table}
 
-### 4.3 Pseudo Code
-```python
-# Pseudo code for Waldo Detection using CNN
-for image in dataset:
-    # Resize the input image to standard dimensions
-    resized_image = resize(image, (224, 224))
-    
-    # Normalize the image
-    normalized_image = normalize(resized_image)
-    
-    # Extract features using convolutional layers
-    feature_map = convolutional_layers(normalized_image)
-    
-    # Apply pooling to reduce dimensionality
-    pooled_features = max_pooling(feature_map)
-    
-    # Flatten the pooled features
-    flattened = flatten(pooled_features)
-    
-    # Pass through fully connected layers for classification
-    output = fully_connected_layers(flattened)
-    
-    # Output indicates presence or absence of Waldo
-    if output == 'Waldo':
-        mark_location(image)
+
+
+### CNN Model Results
+
+Training and Validation Accuracy:
+Below is the graph showcasing the training and validation accuracy over 10 epochs:
+
+```{r}
+knitr::include_graphics("Figure_1.png")
 ```
 
-### 4.4 Differences Between Our Work and Existing Work
-- **Custom Architecture vs. Pre-Trained Models**: Unlike pre-trained models like ResNet or VGG, our custom CNN is specifically designed and trained for recognizing Waldo, which means it is fine-tuned to handle the specific challenges of “Finding Waldo” images, including differentiating from similar distractors.
-- **Sliding Window Approach**: Our approach utilizes a sliding window to locate Waldo across large images, ensuring localized detection, whereas other models generally perform classification without spatial localization for such detailed scenarios. This aligns with techniques discussed in Ren et al. (2015) for region proposal networks.
-- **Data Augmentation**: Significant use of data augmentation (rotations, flips, color adjustments) was employed to enhance model robustness, addressing the variety and occlusions often present in “Finding Waldo” scenes.
+The training accuracy plateaued early, reaching approximately 79.5%, indicating stable learning.
 
-## 5. Analytical and Empirical Evaluation
+Training and Validation Loss:
+Below is the graph showing the loss for both training and validation:
+```{r}
+knitr::include_graphics("Figure_2.png")
+```
 
-### 5.1 Analytical Evaluation
-- **Feature Extraction Complexity**: The convolutional layers utilize multiple 3x3 filters, and the complexity of feature extraction is directly proportional to the number of filters and convolutional layers. This concept is aligned with the findings of Szegedy et al. (2015) on deep feature extraction through multiple convolutional filters. This ensures robust feature learning but also increases computational demand.
-- **Theoretical Bounding of Localization Accuracy**: The sliding window approach offers an advantage in terms of theoretical bounds on localization accuracy. The smaller the stride, the more comprehensive the coverage, increasing the likelihood of correctly identifying Waldo in highly cluttered images.
-- **Generalization Capabilities**: The use of data augmentation contributes to enhancing the model’s ability to generalize to unseen images. Theoretically, data augmentation increases the diversity of the training set, reducing overfitting.
+The training and validation losses steadily decreased, with a final validation loss of ~0.28, showing a good generalization capability.
 
-### 5.2 Experimental Setup
-- **Training Environment**: The model was trained on a GPU-enabled system using TensorFlow, with a training/testing split of 80/20.
-- **Metrics for Evaluation**: Results were analyzed using precision, recall, F1-score, and accuracy metrics.
+Key Evaluation Metrics
+Final Training Accuracy: 79.5%
+Final Validation Accuracy: 79.5%
+Final Training Loss: ~0.32
+Final Validation Loss: ~0.28
 
-### 5.3 Results
-- **Accuracy**: The model achieved an accuracy of 85% in locating Waldo across various complex images.
-- **Precision and Recall**: Precision was recorded at 82%, while recall was 88%, indicating that the model performed well in detecting Waldo while balancing false positives.
-- **F1-Score**: The F1-score, which is the harmonic mean of precision and recall, was calculated to be 85%, showing an effective balance between the precision and recall rates.
+### Results in Tables
 
-### 5.4 Results in Tables
+\begin{table}[h!]
+\centering
+\caption{Performance Metrics of Custom CNN Model}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Metric}                   & \textbf{Value} \\ \hline
+Final Training Accuracy (\%)      & 79.5           \\ \hline
+Final Validation Accuracy (\%)    & 79.5           \\ \hline
+Final Training Loss               & 0.32           \\ \hline
+Final Validation Loss             & 0.28           \\ \hline
+\end{tabular}
+\end{table}
 
-**Table 1: Performance Metrics of Custom CNN vs. Pre-Trained Models**
 
-| Model               | Accuracy (%) | Precision (%) | Recall (%) | F1-Score (%) |
-|---------------------|--------------|---------------|------------|--------------|
-| Custom CNN          | 85           | 82            | 88         | 85           |
-| ResNet (Pre-Trained)| 78           | 76            | 80         | 78           |
-| VGG (Pre-Trained)   | 80           | 78            | 82         | 80           |
+## Observations
+The model demonstrates moderate performance, achieving similar training and validation accuracies.
+The loss reduction trend indicates effective learning but suggests that further tuning (e.g., more data or improved architecture) may yield better results.
+Conclusion
+The CNN model successfully classifies images into waldo_present and waldo_absent categories with an accuracy of approximately 79.5%. However, there is room for improvement:
 
-**Table 2: Model Performance with and without Data Augmentation**
+Collecting additional data to improve model generalization.
+Fine-tuning the model hyperparameters to enhance accuracy.
+Exploring transfer learning approaches with pre-trained models.
 
-| Configuration       | Accuracy (%) | Precision (%) | Recall (%) | F1-Score (%) |
-|---------------------|--------------|---------------|------------|--------------|
-| Without Augmentation| 70           | 68            | 72         | 70           |
-| With Augmentation   | 85           | 82            | 88         | 85           |
-
-### 5.5 Discussion
-- **Model Strengths**: The custom-designed architecture, combined with the sliding window approach and robust data augmentation, helped achieve high accuracy. The model could locate Waldo effectively even in images with significant visual noise.
-- **Model Limitations**: The false positives were primarily attributed to other characters or elements with similar patterns to Waldo, which highlights an area for further refinement. The sliding window method, while effective, increased computational time.
+This project demonstrates the potential of CNNs for solving complex image recognition tasks in cluttered environments.
 
 ## 6. Conclusions, Limitations, and Future Work
 
 ### 6.1 Summary of Findings
-The study demonstrated that CNNs are effective for image recognition in cluttered environments. The custom model successfully identified Waldo in challenging scenes, proving that CNNs can be adapted to handle visually complex tasks.
+This study demonstrated that CNNs are effective for image recognition in cluttered environments. The custom model achieved a training and validation accuracy of **79.5%**, with a final validation loss of **0.28**, showcasing good generalization. The approach highlights the potential of CNNs to adapt to visually complex tasks like "Finding Waldo," where precise feature extraction and object differentiation are essential.
 
 ### 6.2 Limitations
-- **False Positives**: High rates of false positives occurred when background characters had features similar to Waldo.
-- **Limited Dataset**: The dataset used was relatively small, which may have impacted model performance and generalizability.
-- **Computational Costs**: The sliding window approach, while effective, led to increased computational times during inference.
+- **Moderate Accuracy**: The model achieved a validation accuracy of **79.5%**, leaving room for improvement in identifying Waldo more consistently.
+- **Limited Dataset**: The dataset was relatively small, limiting the model's ability to generalize to diverse "Waldo" scenes. Larger and more varied datasets could improve performance.
+- **False Positives**: The model occasionally misclassified background objects or characters resembling Waldo, resulting in false positives.
+- **Computational Costs**: While the CNN model performed well, training and inference times were computationally intensive due to the complexity of the task.
 
 ### 6.3 Future Work
-- **Enhanced Data Collection**: Expand the dataset to include more diverse examples of “Finding Waldo” scenarios.
-- **Improved Model Architecture**: Experiment with more advanced architectures such as ResNet or attention mechanisms to improve accuracy.
-- **Real-Time Detection**: Explore the feasibility of implementing real-time “Waldo” detection using lightweight CNN models.
-- **Reduce False Positives**: Investigate the use of more sophisticated classification techniques, possibly involving ensemble learning, to reduce false positives.
+- **Enhanced Data Collection**: Expanding the dataset with more diverse and challenging "Finding Waldo" scenarios can improve model robustness and generalizability.
+- **Improved Model Architecture**: Future iterations can experiment with advanced architectures such as ResNet or Transformer-based models to enhance feature extraction and classification accuracy.
+- **Real-Time Detection**: Investigating lightweight CNN architectures for real-time Waldo detection could make the model more practical for on-the-fly applications.
+- **Reduce False Positives**: To minimize false positives, incorporating ensemble methods or hybrid approaches, such as combining CNNs with attention mechanisms, may enhance the model's discrimination ability.
+- **Data Augmentation Techniques**: Applying advanced data augmentation strategies could help simulate more real-world scenarios and improve generalization.
+
+
 
 ## 7. References
 1. Krizhevsky, A., Sutskever, I., & Hinton, G. E. (2012). ImageNet classification with deep convolutional neural networks. *Communications of the ACM*, 60(6), 84–90. https://doi.org/10.1145/3065386
@@ -176,4 +179,5 @@ The study demonstrated that CNNs are effective for image recognition in cluttere
 8. Ren, S., He, K., Girshick, R., & Sun, J. (2015). Faster R-CNN: Towards real-time object detection with region proposal networks. *Advances in Neural Information Processing Systems*, 28, 91-99.
 9. Russakovsky, O., Deng, J., Su, H., Krause, J., Satheesh, S., Ma, S., Huang, Z., Karpathy, A., Khosla, A., Bernstein, M., Berg, A. C., & Fei-Fei, L. (2015). ImageNet large scale visual recognition challenge. *International Journal of Computer Vision*, 115, 211–252. https://doi.org/10.1007/s11263-015-0816-y
 10. Dalal, N., & Triggs, B. (2005). Histograms of oriented gradients for human detection. *2005 IEEE Computer Society Conference on Computer Vision and Pattern Recognition (CVPR'05)*, 1, 886–893. https://doi.org/10.1109/CVPR.2005.177
+
 
